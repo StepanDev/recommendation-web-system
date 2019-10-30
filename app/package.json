@@ -28,8 +28,11 @@
     "pg-hstore": "^2.3.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "request": "2.88.0",
+    "request-promise": "4.2.4",
     "sequelize": "6.0.0",
     "serve-favicon": "~2.4.5",
+    "utf8": "3.0.0",
     "webpack": "^4.3.0"
   }
 }
