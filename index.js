@@ -82,7 +82,7 @@ console.log(`roZeroAllUsers(data.users[1]) = ${JSON.stringify(roAllUserUnsorted,
 const roAllUsers = roAllUserUnsorted.sort((a, b) => a.userRo - b.userRo);
 console.log(`roAllUsers = ${JSON.stringify(roAllUserUnsorted, null, 2)}`);
 
-const diffSongs = extractDiffSong(data.users[1], roAllUsers);nide
+const diffSongs = extractDiffSong(data.users[1], roAllUsers);
 console.log(`extractDiffSong = ${JSON.stringify(diffSongs, null, 2)}`);
 
 console.log('songRateForUser', songRateForUser(3, roAllUsers));
