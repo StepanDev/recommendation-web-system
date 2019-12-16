@@ -1,5 +1,3 @@
-// const data = require('./data.json');
-
 function roUsers(firstUser, secondUser) {
   const commonSongs = firstUser.toptracks.track
     .reduce((acc, currentSong) => {
@@ -10,7 +8,6 @@ function roUsers(firstUser, secondUser) {
           }
         );
       if (a) {
-        console.log('commonSOOOOONG');
         acc.push({ firstUser: currentSong, secondUser: a });
       }
       return acc;
@@ -34,7 +31,6 @@ function roZeroAllUsers(user, friends) {
       return acc;
     }
     const userRo = roZero(user, friend);
-    // console.log('friend.toptracks.track', friend.toptracks.track)
     acc.push({ userRo, name: friend.toptracks['@attr'].user, track: friend.toptracks.track });
     return acc;
   }, [])
@@ -50,14 +46,14 @@ function extractDiffSong(user, allUsers) {
       return !acc.some(cs => cs.mbid === curSong.mbid);
     });
 
-    // console.log('diff', diffSongs);
 
     acc.push(...diffSongs);
     return acc;
   }, [])
 }
 
-function songRateForUser(songId, allUsersRo) {
+function songRateForUser(song, allUsersRo) {
+  const songId = song.mbid;
   const { nominator, denominator } = allUsersRo.reduce((acc, curUser, index) => {
     const songInCurUser = curUser.track.find(cs => {
       return cs.mbid === songId;
@@ -73,49 +69,30 @@ function songRateForUser(songId, allUsersRo) {
     rate: denominator === 0
       ? 0
       : nominator / denominator,
-    songId
+    songId,
+    artist: song.artist,
+    image: song.image,
+    name: song.name,
+    url: song.url
   };
 }
 
 function normalizeRate(songRate) {
-  // TODO range form
-  if (songRate > 10) {
-    return 10
-  }
+  // if (songRate > 10) {
+  //   return 10
+  // }
   return songRate
 }
-
-// uncomment all below
-// const roAllUserUnsorted = roZeroAllUsers(data.users[1]);
-// console.log(`roZeroAllUsers(data.users[1]) = ${JSON.stringify(roAllUserUnsorted, null, 2)}`);
-
-// const roAllUsers = roAllUserUnsorted.sort((a, b) => a.userRo - b.userRo);
-// console.log(`roAllUsers = ${JSON.stringify(roAllUserUnsorted, null, 2)}`);
-
-// const diffSongs = extractDiffSong(data.users[1], roAllUsers);
-// console.log(`extractDiffSong = ${JSON.stringify(diffSongs, null, 2)}`);
-
-// console.log('songRateForUser', songRateForUser(3, roAllUsers));
-
-
-// const songsRates = diffSongs.map(song => {
-//   console.log('song', song);
-//   return songRateForUser(song.id, roAllUsers);
-// });
-
-// console.log(songsRates);
 
 function buildRecommendation(user, friends) {
   const roAllUserUnsorted = roZeroAllUsers(user, friends);
   const roAllUsers = roAllUserUnsorted.sort((a, b) => a.userRo - b.userRo);
   const diffSongs = extractDiffSong(user, roAllUsers);
-  // console.log('diffSongs', diffSongs);
+  console.log('diffSongs', diffSongs)
   const songsRates = diffSongs.map(song => {
-    // console.log('song', song);
-    return songRateForUser(song.mbid, roAllUsers);
+    return songRateForUser(song, roAllUsers);
   });
-  console.log('songsRates', songsRates)
-  return songsRates;
+  return songsRates.sort((a,b)=> a.rate - b.rate);
 }
 
 module.exports = { buildRecommendation };

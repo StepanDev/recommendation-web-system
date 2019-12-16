@@ -8,6 +8,10 @@ const path = require('path');
 const app = express();
 const passport = require('passport');
 const router = require('./routes');
+const cors = require('cors')
+
+app.use(cors({origin: 'http://localhost:3000'}))
+
 
 // Log requests to the console.
 app.use(logger('dev'));

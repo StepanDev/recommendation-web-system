@@ -1,7 +1,8 @@
 const rp = require('request-promise')
 const utf8 = require('utf8');
-const LASTFM_API = "blabla"
-const API_KEY = "bla"
+const LASTFM_API = "http://ws.audioscrobbler.com/2.0/"
+const API_KEY = "asdasd"
+const { LASTFM_METHODS, DATA_FIELD } = require('../const')
 
 async function sendRequestToLastFm(httpMethod, method, body, query = {}) {
     try {
@@ -12,7 +13,6 @@ async function sendRequestToLastFm(httpMethod, method, body, query = {}) {
             ...query,
         }
         const r = await rp({ uri: `${LASTFM_API}`, method: httpMethod, body, qs, json: true });
-        // console.log(r)
         return r;
     } catch (e) {
         console.error(e)
@@ -27,7 +27,37 @@ async function getSession(token) {
     return sendRequestToLastFm(method)
 }
 
+async function handlePagination(httpMethod, method, body, query = {}) {
+    // const data = await sendRequestToLastFm(httpMethod, method, body, query);
+return  await sendRequestToLastFm(httpMethod, method, body, query);
+
+    const field = DATA_FIELD[method];
+
+    if (!field)
+        throw 'No such LASTFM method';
+
+    const metaData = data[field]['@attr'];
+
+    const { totalPages } = metaData;
+    if (totalPages <= 1)
+        return data;
+    let paginationRequests = []
+    for (let i = 2; i <= totalPages; i++) {
+        paginationRequests.push(
+            sendRequestToLastFm(httpMethod, method, body, { ...query, page: i })
+        )
+    }
+    const restPages = await Promise.all(paginationRequests);
+    restPages.forEach(page => {
+        // TODO hardcode
+
+        data[field].track.push(...page[field].track);
+    })
+    return data 
+}
+
 module.exports = {
     getSession,
     sendRequestToLastFm,
+    handlePagination,
 }
