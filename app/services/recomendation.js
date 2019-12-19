@@ -84,15 +84,15 @@ function normalizeRate(songRate) {
   return songRate
 }
 
-function buildRecommendation(user, friends) {
+function buildRecommendation(user, friends, neigborsCount= 10, songsCount= 20) {
   const roAllUserUnsorted = roZeroAllUsers(user, friends);
-  const roAllUsers = roAllUserUnsorted.sort((a, b) => a.userRo - b.userRo);
+  const roAllUsers = roAllUserUnsorted.sort((a, b) => a.userRo - b.userRo).slice(0,10) ;
+  console.log('roAllUsers', roAllUsers)
   const diffSongs = extractDiffSong(user, roAllUsers);
-  console.log('diffSongs', diffSongs)
   const songsRates = diffSongs.map(song => {
     return songRateForUser(song, roAllUsers);
   });
-  return songsRates.sort((a,b)=> a.rate - b.rate);
+  return songsRates.sort((a,b)=> a.rate - b.rate).slice(0,songsCount)
 }
 
 module.exports = { buildRecommendation };

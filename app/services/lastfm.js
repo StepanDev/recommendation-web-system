@@ -1,7 +1,7 @@
 const rp = require('request-promise')
 const utf8 = require('utf8');
 const LASTFM_API = "http://ws.audioscrobbler.com/2.0/"
-const API_KEY = "asdasd"
+const API_KEY = "44744c0aec4d6a4e2c2584cb3dcdcc1e"
 const { LASTFM_METHODS, DATA_FIELD } = require('../const')
 
 async function sendRequestToLastFm(httpMethod, method, body, query = {}) {
@@ -16,7 +16,7 @@ async function sendRequestToLastFm(httpMethod, method, body, query = {}) {
         return r;
     } catch (e) {
         console.error(e)
-        return
+        throw e
     }
 }
 

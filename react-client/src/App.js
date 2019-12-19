@@ -9,6 +9,7 @@ import {
 import 'typeface-roboto';
 import Navigation from './components/navigation/Navigation'
 import Songs from './components/songs/Songs'
+import About from './components/about/About'
 
 const API_KEY = "44744c0aec4d6a4e2c2584cb3dcdcc1e"
 
@@ -62,9 +63,6 @@ class App extends React.Component {
   }
 }
 
-function About() {
-  return <h2>About</h2>;
-}
 
 function Users() {
   return <h2>Users</h2>;

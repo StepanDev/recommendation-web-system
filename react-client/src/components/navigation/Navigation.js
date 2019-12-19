@@ -1,22 +1,24 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import HomeIcon from '@material-ui/icons/Home';
-import PersonIcon from '@material-ui/icons/Person';
+import { withStyles } from '@material-ui/core/styles';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link
 } from "react-router-dom";
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 
-const useStyles = makeStyles({
-  root: {
-    width: 500,
+const styles = {
+  aboutLink:{
+    position: 'fixed',
+    right: 20
   },
-});
+  title:{
+    color: 'white',
+
+  }
+};
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -27,36 +29,27 @@ class Navigation extends React.Component {
   }
 
   render() {
-    // const classes = useStyles();
+    const { classes } = this.props;
     const { value } = this.state;
     return (
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/profile">Profile</Link></li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-
-      </nav>
+      <AppBar position="static">
+        <Toolbar>
+          <Link to="/">
+            <Typography variant="h6" className={classes.title}>
+              Головна
+            </Typography>
+          </Link>
+          <div className={classes.aboutLink}>
+            <Link to="/about">
+              <Typography variant="h6" className={classes.title}>
+                Про веб-сайт
+            </Typography>
+            </Link>
+          </div>
+        </Toolbar>
+      </AppBar>
     )
   }
 }
-// return (
-//   <BottomNavigation
-//     value={value}
-//     onChange={(event, newValue) => {
-//       this.setState({value: newValue});
-//     }}
-//     showLabels
-//   //   className={classes.root}
-//   >
-//     <BottomNavigationAction label="Home" icon={<HomeIcon />} />
-//     <BottomNavigationAction label="Profile" icon={<PersonIcon />} />
-//   </BottomNavigation>
-// )
-export default Navigation
+
+export default withStyles(styles)(Navigation)
